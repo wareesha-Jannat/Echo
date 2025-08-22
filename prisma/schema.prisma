@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id   @default(cuid())
+  username     String     @unique
+  displayName  String
+  passwordHash String?
+  email        String?    @unique
+  googleId     String?    @unique
+  avatarUrl    String?
+  bio          String?
+  sessions     Session[]
+  posts        Post[]
+  following    Follow[]   @relation("UserFollowing")
+  followers    Follow[]   @relation("UserFollowers")
+  Likes        Like[]
+  bookmarks    Bookmark[]
+  createdAt             DateTime       @default(now())
+  comments              Comment[]
+  receivedNotifications Notification[] @relation("recipient")
+  issuedNotifications   Notification[] @relation("issuer")
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  secretHash   Bytes
+  expiresAt DateTime
+  createdAt  DateTime  @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Post {
+  id           String         @id @default(cuid())
+  content      String
+  mood         String?
+  qod          String?
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime       @default(now())
+  attachments  Media[]
+  likes        Like[]
+  bookmarks    Bookmark[]
+  commmets     Comment[]
+  linkedNotifications Notification[]
+
+  @@map("posts")
+}
+
+//follower is the user who is following and following is the user who is getting followed by the user in the follower id
+model Follow {
+  followerId  String //the person who is following
+  follower    User   @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+  followingId String //the person being followed
+  following   User   @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+  @@map("follows")
+}
+
+model Media {
+  id     String    @id @default(cuid())
+  postId String?
+  post   Post?     @relation(fields: [postId], references: [id], onDelete: SetNull)
+  type   MediaType
+  url    String
+  publicId String
+
+  createdAt DateTime @default(now())
+
+  @@map("post-media")
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+model Like {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@map("likes")
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+  @@map("bookmarks")
+}
+
+model Comment {
+  id      String @id @default(cuid())
+  content String
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId  String
+  post    Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("comments")
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  recipientId String
+  recipient   User             @relation("recipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  issuerId    String
+  issuer      User             @relation("issuer", fields: [issuerId], references: [id], onDelete: Cascade)
+  postId      String?
+  post        Post?            @relation(fields: [postId], references: [id], onDelete: Cascade)
+  type        NotificationType
+  read        Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+
+  @@map("notifications")
+}
+
+enum NotificationType {
+  LIKE
+  FOLLOW
+  COMMENT
+}
+
+model PasswordResetToken {
+  id String @default(cuid())
+  email  String
+  token String @unique
+
+  createdAt DateTime @default(now())
+  expiresAt  DateTime
+
+  @@map("passwordResetTokens")
+}
