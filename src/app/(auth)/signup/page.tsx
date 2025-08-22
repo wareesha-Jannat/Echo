@@ -35,7 +35,7 @@ export default function Page() {
         {/* Right side image */}
         <div className="relative hidden w-1/2 md:block">
           <Image
-            src="/SignUpForm-image.jpg"
+            src="/signUpForm-image.jpg"
             alt="Sign up illustration"
             fill
             className="object-cover"

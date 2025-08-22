@@ -68,8 +68,8 @@ Custom-authenticated social media platform featuring chat, media sharing, mood-b
 ## Test Account
 Use the following credentials to explore the app after running locally:
 
-- **Username:** jorge@jim
-- **Password:** deftones
+- **Username:** alice-shane
+- **Password:** hardcant
 
 ## Usage
 
