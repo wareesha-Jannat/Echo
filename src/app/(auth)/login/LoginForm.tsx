@@ -67,7 +67,11 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <PasswordInput placeholder="Password" {...field} className="mt-2"/>
+                <PasswordInput
+                  placeholder="Password"
+                  {...field}
+                  className="mt-2"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

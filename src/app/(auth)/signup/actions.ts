@@ -7,7 +7,7 @@ import streamServerClient from "@/lib/stream";
 
 export async function signup(
   credentials: SignUpValues,
-): Promise<{error : boolean, message : string}> {
+): Promise<{ error: boolean; message: string }> {
   try {
     const { username, email, password } = signUpSchema.parse(credentials);
     const passwordHash = await hash(password);
@@ -24,7 +24,7 @@ export async function signup(
     if (existingusername) {
       return {
         error: true,
-        message:  "Username already exists",
+        message: "Username already exists",
       };
     }
     const existingEmail = await prisma.user.findFirst({
@@ -37,7 +37,7 @@ export async function signup(
     });
     if (existingEmail) {
       return {
-         error: true,
+        error: true,
         message: "Email already taken",
       };
     }
@@ -62,15 +62,13 @@ export async function signup(
     await CreateSessionAndSetCookies(newUser.id);
 
     return {
-       error: false,
-        message:  "User created successfully",
-    }
+      error: false,
+      message: "User created successfully",
+    };
   } catch (error) {
-     
-    console.log(error);
     return {
       error: true,
-      message : "Something went wrong. Please try again later",
+      message: "Something went wrong. Please try again later",
     };
   }
 }

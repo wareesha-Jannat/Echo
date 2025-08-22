@@ -152,10 +152,7 @@ function CustomChannelPreviewMessenger({
   const handleDelete = async () => {
     try {
       await channel.delete();
-      console.log(`Channel ${channel.id} deleted`);
-    } catch (error) {
-      console.log("Failed to delete channel", error);
-    }
+    } catch (error) {}
   };
 
   const members = Object.values(channel.state.members);
@@ -168,7 +165,7 @@ function CustomChannelPreviewMessenger({
         props.onSelect?.(event);
       }}
     >
-      <div className="flex items-center gap-3 max-w-50">
+      <div className="flex max-w-50 items-center gap-3">
         <UserAvatar
           avatarUrl={
             otherUser?.length === 1
@@ -177,7 +174,7 @@ function CustomChannelPreviewMessenger({
           }
         />
         <div className="flex min-w-0 flex-col">
-          <span className="font-medium ">
+          <span className="font-medium">
             {channel.data?.name || otherUser[0].user?.name || "UnnamedChat"}
           </span>
           <span className="text-muted-foreground truncate text-sm">

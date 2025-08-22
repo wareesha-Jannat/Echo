@@ -22,9 +22,8 @@ interface NewChatDialogProps {
 }
 
 const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
-
   const { client, setActiveChannel } = useChatContext();
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const { user: loggedInUser } = useSession();
   const [searchInput, setSearchInput] = useState("");
@@ -38,7 +37,8 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
       const q = searchInputDebounced.toLowerCase();
       return client.queryUsers(
         {
-          ...(q ? {
+          ...(q
+            ? {
                 $or: [
                   { name: { $autocomplete: q } },
                   { username: { $autocomplete: q } },
@@ -59,15 +59,16 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
   const mutation = useMutation({
     mutationFn: async () => {
       const members = [loggedInUser.id, ...selectedUsers.map((u) => u.id)];
-   
-       const  channel = client.channel("messaging", null, {
-          members,
-          name: members.length > 2 ? `${loggedInUser.displayName}, ${selectedUsers.map((u) => u.name).join(", ")}`
-              : "",
-         
-        });
-        await channel.watch();
-      
+
+      const channel = client.channel("messaging", null, {
+        members,
+        name:
+          members.length > 2
+            ? `${loggedInUser.displayName}, ${selectedUsers.map((u) => u.name).join(", ")}`
+            : "",
+      });
+      await channel.watch();
+
       return channel;
     },
     onSuccess: (channel) => {
@@ -75,7 +76,6 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
       onChatCreated();
     },
     onError(error) {
-  
       toast({
         variant: "destructive",
         description: "Error starting chat. Please try again,",
@@ -178,7 +178,7 @@ function UserResult({ user, selected, onClick }: UserResultProps) {
           <p className="text-muted-foreground">@{user.username}</p>
         </div>
       </div>
-      {selected && <Check className="size-5 text-primary" />}
+      {selected && <Check className="text-primary size-5" />}
     </button>
   );
 }

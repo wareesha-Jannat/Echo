@@ -17,10 +17,13 @@ const AddComment = ({ post }: AddCommentProps) => {
     e.preventDefault();
     if (!input) return;
 
-    mutation.mutate({
-      post,
-      commentMessage: input,
-    }, {onSuccess: ()=> setInput("")});
+    mutation.mutate(
+      {
+        post,
+        commentMessage: input,
+      },
+      { onSuccess: () => setInput("") },
+    );
   };
 
   return (

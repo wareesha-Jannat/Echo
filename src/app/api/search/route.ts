@@ -27,9 +27,9 @@ export async function GET(req: NextRequest) {
             },
           },
           {
-            mood : {
+            mood: {
               search: searchQuery,
-            }
+            },
           },
           {
             user: {
@@ -52,7 +52,6 @@ export async function GET(req: NextRequest) {
       take: pageSize + 1,
       cursor: cursor ? { id: cursor } : undefined,
     });
-   
 
     const nextCursor = posts.length > pageSize ? posts[pageSize].id : null;
 
@@ -63,7 +62,6 @@ export async function GET(req: NextRequest) {
 
     return Response.json(data);
   } catch (error) {
-    console.error(error);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }

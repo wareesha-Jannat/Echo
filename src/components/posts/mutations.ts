@@ -67,8 +67,7 @@ export function useDeletePostMutation() {
         router.push(`/users/${deletedPost.user.username}`);
       }
     },
-    onError(error) {
-      console.error(error);
+    onError() {
       toast({
         variant: "destructive",
         description: "Failed to delete post please try again",

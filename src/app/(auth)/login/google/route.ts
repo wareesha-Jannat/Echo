@@ -7,8 +7,10 @@ export async function GET() {
   const codeVerifier = generateCodeVerifier();
   const cookieStore = await cookies();
 
-  const url = await google.createAuthorizationURL(state, codeVerifier,  ["profile", "email"],
-);
+  const url = await google.createAuthorizationURL(state, codeVerifier, [
+    "profile",
+    "email",
+  ]);
 
   cookieStore.set("state", state, {
     path: "/",

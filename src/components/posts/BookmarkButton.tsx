@@ -18,7 +18,8 @@ export default function LikeButton({ postId, initialState }: LikeButtonProps) {
   const queryKey = ["bookmark-info", postId];
   const { data } = useQuery({
     queryKey,
-    queryFn: () => kyInstance.get(`/api/posts/${postId}/bookmarks`).json<BookmarkInfo>(),
+    queryFn: () =>
+      kyInstance.get(`/api/posts/${postId}/bookmarks`).json<BookmarkInfo>(),
     initialData: initialState,
     staleTime: Infinity,
   });
@@ -38,7 +39,7 @@ export default function LikeButton({ postId, initialState }: LikeButtonProps) {
     },
     onError(error, variables, context) {
       queryClient.setQueryData<BookmarkInfo>(queryKey, context?.previousState);
-      console.log(error);
+
       toast({
         variant: "destructive",
         description: "Something went wrong please try again",
@@ -54,7 +55,6 @@ export default function LikeButton({ postId, initialState }: LikeButtonProps) {
           data.isBookmarkedByUser && "fill-primary text-primary",
         )}
       />
-      
     </button>
   );
 }

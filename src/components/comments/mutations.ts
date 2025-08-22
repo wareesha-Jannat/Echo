@@ -17,7 +17,7 @@ export function useSubmitCommentMutation() {
 
       await queryClient.cancelQueries({ queryKey });
 
-      queryClient.setQueryData<InfiniteData<CommentPage, string | null>>(
+      (queryClient.setQueryData<InfiniteData<CommentPage, string | null>>(
         queryKey,
         (oldData) => {
           if (!oldData) return;
@@ -38,14 +38,13 @@ export function useSubmitCommentMutation() {
       ),
         toast({
           description: "Comment added successfully",
-        });
+        }));
     },
-    onError: (error) => {
-      console.log(error),
-        toast({
-          variant: "destructive",
-          description: "Failed to comment. please try again later",
-        });
+    onError: () => {
+      toast({
+        variant: "destructive",
+        description: "Failed to comment. please try again later",
+      });
     },
   });
   return mutation;
@@ -59,7 +58,7 @@ export function useDeleteCommentMutation() {
       const queryKey: QueryKey = ["comments", deletedComment.postId];
       await queryClient.cancelQueries({ queryKey });
 
-      queryClient.setQueryData<InfiniteData<CommentPage, string | null>>(
+      (queryClient.setQueryData<InfiniteData<CommentPage, string | null>>(
         queryKey,
         (oldData) => {
           if (!oldData) return;
@@ -74,7 +73,7 @@ export function useDeleteCommentMutation() {
       ),
         toast({
           description: "comment deleted successfully",
-        });
+        }));
     },
     onError(error) {
       toast({

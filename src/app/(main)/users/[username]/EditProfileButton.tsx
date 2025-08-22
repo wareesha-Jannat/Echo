@@ -9,9 +9,8 @@ interface EditProfileButtonProps {
 }
 
 const EditProfileButton = ({ user }: EditProfileButtonProps) => {
-
   const [showDialog, setShowDialog] = useState(false);
-  
+
   return (
     <>
       <Button variant={"outline"} onClick={() => setShowDialog(!showDialog)}>

@@ -40,10 +40,8 @@ export async function POST(req: NextRequest) {
       data: { avatarUrl: result.secure_url },
     });
 
-    console.log("avatar updated successfully", result.secure_url);
     return NextResponse.json({ avatar_Url: result.secure_url });
   } catch (error) {
-    console.error("Avatar upload failed:", error);
     return NextResponse.json(
       { error: "Internal Server Error", message: (error as Error).message },
       { status: 500 },

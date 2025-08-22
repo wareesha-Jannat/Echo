@@ -23,13 +23,14 @@ export default function PostEditor() {
   const [mood, setMood] = useState("");
   const [qod, setQod] = useState(false);
 
-  const queryClient =  useQueryClient();
-  const cachedQuestion = queryClient.getQueryData<{question : string }>(["question-of-the-day"])
+  const queryClient = useQueryClient();
+  const cachedQuestion = queryClient.getQueryData<{ question: string }>([
+    "question-of-the-day",
+  ]);
 
-  
   const mutation = useSubmitPostMutation();
-  const { startUpload, isUploading, removeAttachment, reset, attachments } = UseMediaUpload();
-
+  const { startUpload, isUploading, removeAttachment, reset, attachments } =
+    UseMediaUpload();
 
   const { getRootProps } = useDropzone({
     accept: {
@@ -43,7 +44,7 @@ export default function PostEditor() {
 
   const { onClick, ...rootProps } = getRootProps();
 
-//text editor
+  //text editor
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -61,28 +62,25 @@ export default function PostEditor() {
     immediatelyRender: false,
   });
 
-
   const input =
     editor?.getText({
       blockSeparator: "\n",
     }) || "";
-
 
   function onSubmit() {
     mutation.mutate(
       {
         content: input,
         mood: mood?.trim(),
-        qod : qod ? cachedQuestion?.question : "",
+        qod: qod ? cachedQuestion?.question : "",
         mediaIds: attachments.map((a) => a.mediaId).filter(Boolean) as string[],
       },
       {
         onSuccess: () => {
           editor?.commands.clearContent();
           setMood("");
-          setQod(false)
+          setQod(false);
           reset();
-        
         },
       },
     );
@@ -122,7 +120,7 @@ export default function PostEditor() {
             placeholder="Type or select a mood..."
             className="bg-background w-full rounded-2xl border-none px-3 py-2 focus:ring-0 focus:outline-none"
           />
-          
+
           <p
             className={
               50 - mood.length <= 10 ? "text-destructive" : "text-primary"
@@ -137,14 +135,13 @@ export default function PostEditor() {
             ))}
           </datalist>
 
-          <label className="flex gap-2 ">
-            <input 
-            type="checkbox"
-            checked={qod}
-            onChange={(e)=> setQod(e.target.checked)}
-             
-             />
-             <span>Tag this post for the question of the day</span> 
+          <label className="flex gap-2">
+            <input
+              type="checkbox"
+              checked={qod}
+              onChange={(e) => setQod(e.target.checked)}
+            />
+            <span>Tag this post for the question of the day</span>
           </label>
         </div>
       </div>
@@ -181,7 +178,6 @@ function AddAttachmentButton({
   onFilesSelected,
   disabled,
 }: AttachmentsButtonProps) {
-
   const fileInputRef = useRef<HTMLInputElement>(null);
   return (
     <>
@@ -245,19 +241,18 @@ interface AttachmentPreviewProps {
 }
 
 function AttachmentPreview({
-  attachment: { file,  isUploading },
+  attachment: { file, isUploading },
   onRemoveClick,
 }: AttachmentPreviewProps) {
+  const [src, setSrc] = useState<string | null>(null);
 
-  const [src, setSrc] = useState<string| null>(null)
-  
   useEffect(() => {
-    const objectUrl = URL.createObjectURL(file)
-    setSrc(objectUrl)
-    return () => URL.revokeObjectURL(objectUrl)
-  }, [file])
-  
-  if(!src) return null;
+    const objectUrl = URL.createObjectURL(file);
+    setSrc(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [file]);
+
+  if (!src) return null;
   return (
     <div
       className={cn("relative mx-auto size-fit", isUploading && "opacity-50")}
@@ -278,7 +273,7 @@ function AttachmentPreview({
       {!isUploading && (
         <button
           onClick={onRemoveClick}
-          className="bg-foreground text-background rounded-2xl hover:bg-foreground/60 absolute top-3 right-3 p-1.5 transition-colors"
+          className="bg-foreground text-background hover:bg-foreground/60 absolute top-3 right-3 rounded-2xl p-1.5 transition-colors"
         >
           <X size={20} />
         </button>

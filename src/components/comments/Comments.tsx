@@ -37,7 +37,7 @@ const Comments = ({ post }: CommentsProps) => {
   if (status === "pending") {
     return (
       <div>
-        <Loader2 className="mx-auto size-7 space-y-5 animate-spin" />
+        <Loader2 className="mx-auto size-7 animate-spin space-y-5" />
       </div>
     );
   }
@@ -46,7 +46,7 @@ const Comments = ({ post }: CommentsProps) => {
       <>
         <div className="space-y-3">
           <AddComment post={post} />
-          <p className="text-center text-muted-foreground">
+          <p className="text-muted-foreground text-center">
             No one has commented anything yet.
           </p>
         </div>
@@ -55,7 +55,7 @@ const Comments = ({ post }: CommentsProps) => {
   }
   if (status === "error") {
     return (
-      <div className="text-center text-destructive">
+      <div className="text-destructive text-center">
         <p>Error Loading comments</p>
       </div>
     );
@@ -68,7 +68,9 @@ const Comments = ({ post }: CommentsProps) => {
         className="space-y-5"
         onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}
       >
-        {comments?.map((c) => <Comment key={c.id} comment={c} />)}
+        {comments?.map((c) => (
+          <Comment key={c.id} comment={c} />
+        ))}
       </InfiniteScrollContainer>
     </div>
   );

@@ -1,4 +1,4 @@
-import {  CreateSessionAndSetCookies,  google } from "@/auth";
+import { CreateSessionAndSetCookies, google } from "@/auth";
 import kyInstance from "@/lib/ky";
 import { prisma } from "@/lib/prisma";
 import streamServerClient from "@/lib/stream";
@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
   const state = req.nextUrl.searchParams.get("state");
-  const cookieStore = await cookies()
+  const cookieStore = await cookies();
 
   const storedState = cookieStore.get("state")?.value;
   const storedCodeVerifier = cookieStore.get("code_verifier")?.value;
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
           Authorization: `Bearer ${tokens.accessToken()}`,
         },
       })
-      .json<{ id: string; name: string, email:string }>();
+      .json<{ id: string; name: string; email: string }>();
 
     let existingUser = await prisma.user.findUnique({
       where: {
@@ -45,61 +45,56 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    if(!existingUser && googleUser.email){
+    if (!existingUser && googleUser.email) {
       const oldUser = await prisma.user.findUnique({
-    where: { email: googleUser.email },
-  });
+        where: { email: googleUser.email },
+      });
 
-  if (oldUser) {
-    // Update the user to link their Google account
-    await prisma.user.update({
-      where: { id: oldUser.id },
-      data: {
-        googleId: googleUser.id,
-      },
-    });
-     await CreateSessionAndSetCookies(oldUser.id)
-      return NextResponse.redirect(new URL('/', req.url))
-  }
-}
+      if (oldUser) {
+        // Update the user to link their Google account
+        await prisma.user.update({
+          where: { id: oldUser.id },
+          data: {
+            googleId: googleUser.id,
+          },
+        });
+        await CreateSessionAndSetCookies(oldUser.id);
+        return NextResponse.redirect(new URL("/", req.url));
+      }
+    }
 
-  
+    const username = slugify(googleUser.name);
 
-    const username = slugify(googleUser.name) 
-    
-
-   const newUser =  await prisma.$transaction(async (tx) => {
-     const createdUser =  await tx.user.create({
+    const newUser = await prisma.$transaction(async (tx) => {
+      const createdUser = await tx.user.create({
         data: {
           username,
           displayName: googleUser.name,
           googleId: googleUser.id,
         },
       });
- const newUsername = username + "-" + createdUser.id.slice(0, 4);
-   await tx.user.update({
-    where : {
-      id : createdUser.id
-    },
+      const newUsername = username + "-" + createdUser.id.slice(0, 4);
+      await tx.user.update({
+        where: {
+          id: createdUser.id,
+        },
         data: {
-          username : newUsername
+          username: newUsername,
         },
       });
-      
+
       await streamServerClient.upsertUser({
         id: createdUser.id,
-        username : newUsername,
+        username: newUsername,
         name: googleUser.name,
       });
-      return createdUser
+      return createdUser;
     });
 
-  await CreateSessionAndSetCookies(newUser.id)
-    
+    await CreateSessionAndSetCookies(newUser.id);
 
-    return  NextResponse.redirect(new URL('/', req.url))
+    return NextResponse.redirect(new URL("/", req.url));
   } catch (error) {
-    console.error(error);
     if (error instanceof OAuth2RequestError) {
       return new NextResponse(null, {
         status: 400,

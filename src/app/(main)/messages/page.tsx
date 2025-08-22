@@ -1,17 +1,16 @@
 import { Metadata } from "next";
 import Chat from "./Chat";
 
-export const metadata : Metadata = {
-    title : `Messages`
-}
+export const metadata: Metadata = {
+  title: `Messages`,
+};
 
 const page = () => {
   return (
     <>
-     <Chat />
+      <Chat />
     </>
-   
-  )
-}
+  );
+};
 
-export default page
+export default page;

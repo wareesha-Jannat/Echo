@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     default: "Echo",
   },
   icons: {
- icon : '/favicon.png'
+    icon: "/favicon.png",
   },
   description: "The social media app for powernerds",
 };

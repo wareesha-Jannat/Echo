@@ -5,7 +5,6 @@ import { prisma } from "@/lib/prisma";
 import { GetCommentDataInclude, PostData } from "@/lib/types";
 import { addCommentSchema } from "@/lib/validation";
 
-
 export async function SubmitComment({
   post,
   commentMessage,
@@ -19,27 +18,27 @@ export async function SubmitComment({
 
   const [newComment] = await prisma.$transaction([
     prisma.comment.create({
-    data: {
-      content,
-      userId: loggedInUser.id,
-      postId: post.id,
-    },
-    include: GetCommentDataInclude(loggedInUser.id),
-  }),
-  ...(loggedInUser.id !== post.userId ? [
-    prisma.notification.create({
-      data : {
-   issuerId : loggedInUser.id,
-      recipientId : post.userId,
-      postId : post.id,
-      type: "COMMENT"
-      }
-     
-    })
-  
-  ]: [])
-  ])
- 
+      data: {
+        content,
+        userId: loggedInUser.id,
+        postId: post.id,
+      },
+      include: GetCommentDataInclude(loggedInUser.id),
+    }),
+    ...(loggedInUser.id !== post.userId
+      ? [
+          prisma.notification.create({
+            data: {
+              issuerId: loggedInUser.id,
+              recipientId: post.userId,
+              postId: post.id,
+              type: "COMMENT",
+            },
+          }),
+        ]
+      : []),
+  ]);
+
   return newComment;
 }
 export async function deleteComment(id: string) {

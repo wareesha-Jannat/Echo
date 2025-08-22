@@ -6,8 +6,7 @@ import { cache } from "react";
 import Post from "@/components/posts/Post";
 import { Metadata } from "next";
 
-import  PostUserInfo  from "./PostUserInfo";
-
+import PostUserInfo from "./PostUserInfo";
 
 interface PageProps {
   params: Promise<{ postId: string }>;

@@ -44,7 +44,7 @@ export default function SearchResults({ query }: SearchResultsProps) {
 
   if (status === "success" && !posts.length && !hasNextPage) {
     return (
-      <p className="text-center text-muted-foreground">
+      <p className="text-muted-foreground text-center">
         No posts found for this query.
       </p>
     );
@@ -52,7 +52,7 @@ export default function SearchResults({ query }: SearchResultsProps) {
 
   if (status === "error") {
     return (
-      <p className="text-center text-destructive">
+      <p className="text-destructive text-center">
         An error occurred while loading posts.
       </p>
     );

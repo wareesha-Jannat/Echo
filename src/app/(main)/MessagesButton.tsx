@@ -31,7 +31,7 @@ export default function MessagesButton({ initialState }: MessagesButtonProps) {
         <div className="relative">
           <Mail />
           {!!data.unreadCount && (
-            <span className="absolute -right-1 -top-1 rounded-full bg-primary px-1 text-xs font-medium tabular-nums text-primary-foreground">
+            <span className="bg-primary text-primary-foreground absolute -top-1 -right-1 rounded-full px-1 text-xs font-medium tabular-nums">
               {data.unreadCount}
             </span>
           )}

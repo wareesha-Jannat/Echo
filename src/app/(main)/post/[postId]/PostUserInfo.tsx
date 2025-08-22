@@ -1,25 +1,28 @@
-"use client"
+"use client";
 import FollowButton from "@/components/FollowButton";
 import Linkify from "@/components/Linkify";
 import TooltipWrapper from "@/components/TooltipWrapper";
 import UserAvatar from "@/components/UserAvatar";
 import { UserData } from "@/lib/types";
-import  Link from "next/link";
+import Link from "next/link";
 
 interface PostUserInfoProps {
   user: UserData;
   loggedInUserId: string;
 }
 
- export default function PostUserInfo({ user, loggedInUserId }: PostUserInfoProps) {
-    if(!user) return null
-  console.log(user);
+export default function PostUserInfo({
+  user,
+  loggedInUserId,
+}: PostUserInfoProps) {
+  if (!user) return null;
+
   return (
     <div className="bg-card sticky hidden h-fit w-80 space-y-5 rounded-2xl to-[5.25rem] p-5 shadow-sm md:block lg:w-85">
       <div className="text-xl font-bold">About this User</div>
       {user && (
         <TooltipWrapper user={user}>
-          <div className="items-center gap-2 flex">
+          <div className="flex items-center gap-2">
             <Link
               href={`/users/${user.username}`}
               className="flex items-center gap-3"

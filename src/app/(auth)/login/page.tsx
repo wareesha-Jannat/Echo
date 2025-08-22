@@ -11,13 +11,13 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="flex min-h-[100dvh] overflow-hidden items-center justify-center bg-page-gradient">
-      <div className="flex h-full max-h-140 md:w-full max-w-236 rounded-2xl shadow-2xl">
-        <div className="w-full space-y-8 rounded-2xl overflow-y-auto p-10 md:w-1/2  max-md:bg-[linear-gradient(224deg,_#d2f3f5_58%,_#0da0e9_40%)] dark:max-md:bg-[linear-gradient(224deg,_#0a2a3e_58%,_#074b70_40%)] "> 
+    <main className="bg-page-gradient flex min-h-[100dvh] items-center justify-center overflow-hidden">
+      <div className="flex h-full max-h-140 max-w-236 rounded-2xl shadow-2xl md:w-full">
+        <div className="w-full space-y-8 overflow-y-auto rounded-2xl p-10 max-md:bg-[linear-gradient(224deg,_#d2f3f5_58%,_#0da0e9_40%)] md:w-1/2 dark:max-md:bg-[linear-gradient(224deg,_#0a2a3e_58%,_#074b70_40%)]">
           <h1 className="text-primary text-center text-3xl font-bold">
             Login to Echo
           </h1>
-          <div className="space-y-5 ">
+          <div className="space-y-5">
             <GoogleSignInButton />
             <div className="flex items-center gap-3">
               <div className="bg-muted h-px flex-1" />
@@ -45,7 +45,7 @@ export default function Page() {
           loop
           muted
           playsInline
-          className="hidden object-cover md:block md:w-1/2 "
+          className="hidden object-cover md:block md:w-1/2"
         >
           {" "}
           <source src="/login-video.mp4" type="video/mp4" />

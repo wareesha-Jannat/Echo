@@ -100,8 +100,7 @@ export function useUpdateProfileMutation() {
         description: "Profile Updated",
       });
     },
-    onError(error) {
-      console.error(error);
+    onError() {
       toast({
         variant: "destructive",
         description: "Failed to update profile. please try again",

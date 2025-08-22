@@ -14,20 +14,25 @@ const DeleteAccountButton = ({ id }: DeleteAccountProps) => {
   const router = useRouter();
 
   const mutation = useMutation({
-    mutationFn: (id: string) =>{
-        const c = confirm("Are you sure you want to delete your account this action cannot be undone?")
-          if(c) {return DeleteAccount(id) }
-          return Promise.reject("User cancelled the deletion.");
-    } ,
+    mutationFn: (id: string) => {
+      const c = confirm(
+        "Are you sure you want to delete your account this action cannot be undone?",
+      );
+      if (c) {
+        return DeleteAccount(id);
+      }
+      return Promise.reject("User cancelled the deletion.");
+    },
     onSuccess: () => {
       toast({
         description: "Account deleted Successfully",
       });
-      
+
       router.push("/signup");
     },
     onError: (error) => {
-        if (typeof error ===  "string"  && error  === "User cancelled the deletion.") return;
+      if (typeof error === "string" && error === "User cancelled the deletion.")
+        return;
       toast({
         variant: "destructive",
         description: "Failed to delete account. Please try again later",

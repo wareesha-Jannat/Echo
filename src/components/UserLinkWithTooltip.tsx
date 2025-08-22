@@ -1,7 +1,7 @@
 import kyInstance from "@/lib/ky";
 import { UserData } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
-import  { HTTPError } from "ky";
+import { HTTPError } from "ky";
 import Link from "next/link";
 
 import React, { PropsWithChildren } from "react";
@@ -15,7 +15,6 @@ const UserLinkWithTooltip = ({
   children,
   username,
 }: UserLinkWithTooltipProps) => {
-
   const { data } = useQuery({
     queryKey: ["user-data", username],
     queryFn: () =>

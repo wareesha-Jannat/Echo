@@ -47,10 +47,8 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-
-export default async function Page( {params}: PageProps) {
-
-  const { username}  = await params;
+export default async function Page({ params }: PageProps) {
+  const { username } = await params;
   const { user: loggedInUser } = await validateRequest();
   if (!loggedInUser) {
     return (
@@ -86,7 +84,6 @@ interface UserProfileProps {
 }
 
 async function UserProfile({ user, loggedInUserId }: UserProfileProps) {
-
   const followerInfo: FollowingData = {
     followers: user._count.followers,
     isFollowedByUser: user.followers.some(
@@ -127,10 +124,7 @@ async function UserProfile({ user, loggedInUserId }: UserProfileProps) {
               </Linkify>
             </>
           )}
-          {user.id === loggedInUserId && (
-               <DeleteAccountButton id={user.id} />
-          )}
-          
+          {user.id === loggedInUserId && <DeleteAccountButton id={user.id} />}
         </div>
         {user.id === loggedInUserId ? (
           <EditProfileButton user={user} />

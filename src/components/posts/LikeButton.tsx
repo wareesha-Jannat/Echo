@@ -41,7 +41,7 @@ export default function LikeButton({ postId, initialState }: LikeButtonProps) {
     },
     onError(error, variables, context) {
       queryClient.setQueryData<LikeData>(queryKey, context?.previousState);
-      console.log(error);
+
       toast({
         variant: "destructive",
         description: "Something went wrong please try again",

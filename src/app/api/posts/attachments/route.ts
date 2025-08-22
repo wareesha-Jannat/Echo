@@ -9,7 +9,7 @@ const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024; //4MB
 
 interface UploadAttachmentResult {
   secure_url: string;
-  public_id : string;
+  public_id: string;
   resource_type: string;
 }
 
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
         const media = await prisma.media.create({
           data: {
             url: result.secure_url,
-            publicId : result.public_id,
+            publicId: result.public_id,
             type,
           },
         });

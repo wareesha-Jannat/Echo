@@ -6,7 +6,7 @@ import React from "react";
 
 const Navbar = () => {
   return (
-    <header className="sticky top-0 z-10 bg-page-gradient">
+    <header className="bg-page-gradient sticky top-0 z-10">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 px-5 py-3 min-[450px]:justify-center">
         <Link
           href={"/"}

@@ -46,7 +46,7 @@ const MenuBar = async ({ className }: MenuBarProps) => {
       />
       <Button
         variant="ghost"
-        className="flex items-center justify-start  sm:gap-3"
+        className="flex items-center justify-start sm:gap-3"
         title="bookmarks"
         asChild
       >

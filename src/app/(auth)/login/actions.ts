@@ -25,7 +25,6 @@ export async function login(
       };
     }
 
-   
     const validPassword = await verify(existingUser.passwordHash, password);
     if (!validPassword) {
       return {
@@ -40,7 +39,6 @@ export async function login(
       message: "User created successfully",
     };
   } catch (error) {
-    console.log(error);
     return {
       error: true,
       message: "Something went wrong. Please try again later",
