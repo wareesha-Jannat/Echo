@@ -20,8 +20,8 @@ Custom-authenticated social media platform featuring chat, media sharing, mood-b
 
 ## Features
 
-- Google and credentials login (custom authentication with Argon2 and arctic)
-- Real-time chat using Stream Chat
+- Google and credentials login (custom authentication with Argon2 and arctic using lucia-auth the learning resource for auth)
+- Real-time chat using Stream Chat with creator-only message deletion
 - Media uploads (Cloudinary)
 - Mood-based posts and filtering
 - Daily Question feature
@@ -32,8 +32,8 @@ Custom-authenticated social media platform featuring chat, media sharing, mood-b
 - **Frontend:** Next.js 15, React 19, Tailwind CSS
 - **Backend:** Next.js API Routes, Prisma ORM
 - **Database:** PostgreSQL
-- **Authentication:** Custom Auth with Argon2 and arctic using lucia-auth the learning resource for auth
-- **Chat:** Stream Chat
+- **Authentication:** Custom Auth with Argon2 and arctic 
+- **Chat:** Stream Chat 
 - **Media Handling:** Cloudinary
 
 ## Installation
@@ -46,12 +46,24 @@ Custom-authenticated social media platform featuring chat, media sharing, mood-b
    ```
 
 2. Navigate to project directory:
-   cd echo-social-media
-3. Install dependencies:
-   npm install --legacy-peer-deps
+ ```bash
+   cd echo-social-media 
 
+   ```
+   
+
+3. Install dependencies:
+ ```bash
+   npm install --legacy-peer-deps
+   
+   ```
+   
+    
 4. Start the development server:
+    ```bash
    npm run dev
+   
+   ```
 
 ## Test Account
 Use the following credentials to explore the app after running locally:
