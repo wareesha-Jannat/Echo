@@ -17,23 +17,23 @@ const QuestionOfDay = () => {
 
   return (
     <div className="bg-card flex flex-col items-center justify-center gap-2 rounded-2xl p-4 shadow-sm">
-      <div className="flex w-full flex-col items-center justify-between gap-3 min-[450px]:flex-row sm:gap-0">
+      <div className="flex w-full  items-center flex-row ">
         <div className="text-primary flex items-center gap-2 font-semibold">
           <Sparkles className="size-4" />
           <span> Question of the day</span>
         </div>
         <Button
           type="button"
-          className="bg-primary text-white"
+          className="bg-primary text-white ml-auto"
           onClick={() => setQod(!qod)}
         >
-          {qod ? "All posts" : "Answered posts"}
+          { qod ? "All posts" : "Answered posts"}
         </Button>
       </div>
       {isPending ? (
         <Loader2 className="animate-spin" />
       ) : (
-        <p className="text-lg leading-snug font-medium">{data?.question}</p>
+        <p className="text-lg leading-snug font-normal sm:font-medium">{data?.question}</p>
       )}
     </div>
   );

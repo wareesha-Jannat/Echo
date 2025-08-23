@@ -18,7 +18,7 @@ const Comment = ({ comment }: CommentProps) => {
       <span className="hidden sm:inline">
         <UserTooltip user={comment.user}>
           <Link href={`/api/users/${comment.user.username}`}>
-            <UserAvatar avatarUrl={comment.user.avatarUrl} size={40} />
+            <UserAvatar avatarUrl={comment.user.avatarUrl || comment.user.displayName?.[0]} size={40} />
           </Link>
         </UserTooltip>
       </span>

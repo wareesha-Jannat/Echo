@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSession } from "../SessionProvider";
 import {
-  Avatar,
   ChannelList,
-  ChannelPreviewMessenger,
   ChannelPreviewUIComponentProps,
   useChatContext,
 } from "stream-chat-react";
@@ -12,7 +10,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { MailPlus, MoreHorizontal, Trash2, X } from "lucide-react";
 import NewChatDialog from "./NewChatDialog";
-import { CustomChannelData } from "stream-chat";
 import UserAvatar from "@/components/UserAvatar";
 import {
   DropdownMenu,
@@ -52,7 +49,7 @@ const ChatSidebar = ({ open, onclose }: ChatSidebarProps) => {
   return (
     <div
       className={cn(
-        "flex size-full flex-col border-e sm:w-72",
+        "flex size-full flex-col border-e min-[700px]:w-72",
         open ? "flex" : "hidden md:flex",
       )}
     >
@@ -160,21 +157,26 @@ function CustomChannelPreviewMessenger({
   return (
     <div
       className="hover:bg-muted flex cursor-pointer items-center justify-between px-3 py-2"
-      onClick={(event) => {
+      onClick={() => {
         setActiveChannel?.(channel, props.watchers);
-        props.onSelect?.(event);
+        onSelect();
       }}
     >
-      <div className="flex max-w-50 items-center gap-3">
+      <div className="flex min-[700px]:max-w-[200px]  items-center gap-2">
         <UserAvatar
           avatarUrl={
             otherUser?.length === 1
               ? otherUser[0].user?.image
-              : otherUser.map((u) => u.user?.name?.[0] ?? "").join("")
+              : otherUser
+                  .map((u) => u.user?.name?.[0] ?? "")
+                  .join("")
+                  .slice(0, 2)
+                  .toUpperCase()
           }
+          size={48}
         />
         <div className="flex min-w-0 flex-col">
-          <span className="font-medium">
+          <span className="truncate font-medium">
             {channel.data?.name || otherUser[0].user?.name || "UnnamedChat"}
           </span>
           <span className="text-muted-foreground truncate text-sm">

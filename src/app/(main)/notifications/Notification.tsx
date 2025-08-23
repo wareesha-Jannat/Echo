@@ -42,7 +42,7 @@ const Notification = ({ notification }: NotificationProps) => {
       >
         <div className="my-1">{icon}</div>
         <div className="space-y-2">
-          <UserAvatar avatarUrl={notification.issuer.avatarUrl} size={35} />
+          <UserAvatar avatarUrl={notification.issuer.avatarUrl  || notification.issuer.displayName?.[0]} size={35} />
           <div className="flex flex-col">
             <span className="font-bold">{notification.issuer.displayName}</span>
             {"  "}

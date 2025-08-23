@@ -29,7 +29,9 @@ export default function Post({ post }: PostProps) {
         <div className="flex flex-wrap gap-3">
           <UserTooltip user={post.user}>
             <Link href={`/users/${post.user.username}`}>
-              <UserAvatar avatarUrl={post.user.avatarUrl} />
+              <UserAvatar
+                avatarUrl={post.user.avatarUrl || post.user.displayName?.[0]}
+              />
             </Link>
           </UserTooltip>
           <div>
@@ -57,9 +59,14 @@ export default function Post({ post }: PostProps) {
         )}
       </div>
       {post.mood && (
-        <span className="inline-block rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
+        <span className="inline-block rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-400">
           {post.mood}
         </span>
+      )}
+      {post.qod && (
+        <div className="mb-2 rounded-lg bg-yellow-100 p-2 text-sm font-medium text-yellow-900">
+          {post.qod}
+        </div>
       )}
 
       <Linkify>

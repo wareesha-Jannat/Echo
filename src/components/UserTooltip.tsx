@@ -27,7 +27,7 @@ const UserTooltip = ({children, user}: UserTooltipProps) => {
             <div className='flex max-w-80 flex-col gap-3  break-words px-1 py-2 md:min-w-52'>
                 <div className="flex items-center justify-between gap-2">
                     <Link href={`/users/${user.username}`}>
-                    <UserAvatar avatarUrl={user.avatarUrl} size={70} />
+                    <UserAvatar avatarUrl={user.avatarUrl  || user.displayName?.[0]} size={70} />
                     </Link>
                     {loggedInUser.id != user.id && 
                     (

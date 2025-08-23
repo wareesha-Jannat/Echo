@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { ImageIcon, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function PostEditor() {
   const { user } = useSession();
@@ -107,7 +107,7 @@ export default function PostEditor() {
     <div className="bg-card flex flex-col gap-2 rounded-2xl p-5 shadow-sm">
       <div className="flex gap-2">
         <UserAvatar
-          avatarUrl={user.avatarUrl}
+          avatarUrl={user.avatarUrl || user.displayName?.[0]}
           className="hidden min-[460px]:inline"
         />
         <div {...rootProps} className="w-full space-y-3">

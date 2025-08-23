@@ -15,7 +15,7 @@ export default async function Layout({
 
   return (
     <SessionWrapper value={session}>
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-[100dvh] flex-col">
         <Navbar />
 
         <div className="mx-auto flex w-full max-w-7xl grow gap-5 p-5">
