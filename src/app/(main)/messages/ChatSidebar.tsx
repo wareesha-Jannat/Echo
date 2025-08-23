@@ -162,7 +162,7 @@ function CustomChannelPreviewMessenger({
         onSelect();
       }}
     >
-      <div className="flex min-[700px]:max-w-[200px]  items-center gap-2">
+      <div className="flex max-w-[200px]  items-center gap-2">
         <UserAvatar
           avatarUrl={
             otherUser?.length === 1
