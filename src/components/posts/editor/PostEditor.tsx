@@ -60,6 +60,23 @@ export default function PostEditor() {
     editable: true,
     injectCSS: true,
     immediatelyRender: false,
+    editorProps: {
+      handlePaste(view, event) {
+        const items = event.clipboardData?.items;
+        if (!items) return false;
+
+        const files: File[] = Array.from(items)
+          .filter((item) => item.kind === "file")
+          .map((item) => item.getAsFile()) as File[];
+
+        if (files.length > 0) {
+          startUpload(files);
+          return true;
+        }
+
+        return false;
+      },
+    },
   });
 
   const input =
@@ -86,17 +103,6 @@ export default function PostEditor() {
     );
   }
 
-  function onPaste(e: React.ClipboardEvent<HTMLInputElement>) {
-    const items = e.clipboardData?.items;
-    if (!items) return;
-    const files: File[] = Array.from(items)
-      .filter((item) => item.kind === "file")
-      .map((item) => item.getAsFile()) as File[];
-    if (files.length > 0) {
-      startUpload(files);
-    }
-  }
-
   return (
     <div className="bg-card flex flex-col gap-2 rounded-2xl p-5 shadow-sm">
       <div className="flex gap-2">
@@ -108,7 +114,6 @@ export default function PostEditor() {
           <EditorContent
             editor={editor}
             className="bg-background max-h-80 w-full overflow-y-auto rounded-2xl border-none px-5 py-3 outline-none"
-            onPaste={onPaste}
           />
           <input
             list="moodSuggestions"

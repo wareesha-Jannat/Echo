@@ -71,14 +71,20 @@ Use the following credentials to explore the app after running locally:
 - **Username:** alice-shane
 - **Password:** hardcant
 
-## Usage
+## Live Demo
+[Visit the live site](https://echo-ashy.vercel.app)
 
-The application will be deployed soon.  
-For now, clone the repository and run locally (see [Installation](#installation) section).
 
 ## Screenshots
 
-Screenshots will be added after deployment.
+### Login Page
+![Login Page](./public/screenshots/login.png)
+
+### Home Page
+![Home Page](./public/screenshots/home.png)
+
+### Dashboard
+![Chat page](./public/screenshots/messaging.png)
 
 ## License
 

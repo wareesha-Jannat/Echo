@@ -45,6 +45,11 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    if (existingUser) {
+      await CreateSessionAndSetCookies(existingUser.id);
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+
     if (!existingUser && googleUser.email) {
       const oldUser = await prisma.user.findUnique({
         where: { email: googleUser.email },
@@ -95,6 +100,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.redirect(new URL("/", req.url));
   } catch (error) {
+    console.error("Google Callback Error:", error);
     if (error instanceof OAuth2RequestError) {
       return new NextResponse(null, {
         status: 400,
