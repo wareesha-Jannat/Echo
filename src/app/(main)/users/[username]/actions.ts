@@ -45,6 +45,9 @@ export async function DeleteAccount(id: string) {
     (await tx.user.delete({
       where: { id },
     }),
-      await streamServerClient.deleteUser(userId, { hard_delete: true }));
+      await streamServerClient.deleteUser(userId, {
+        hard_delete: false,
+        mark_messages_deleted: false,
+      }));
   });
 }
