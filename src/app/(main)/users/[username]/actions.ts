@@ -45,6 +45,13 @@ export async function DeleteAccount(id: string) {
     (await tx.user.delete({
       where: { id },
     }),
+      // 1. Anonymize user in Stream
+      await streamServerClient.upsertUser({
+        id: userId,
+        name: "Deleted User",
+        image: undefined,
+      }),
+      // 2. Soft delete in Stream (keeps messages)
       await streamServerClient.deleteUser(userId, {
         hard_delete: false,
         mark_messages_deleted: false,
