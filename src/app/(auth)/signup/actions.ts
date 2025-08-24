@@ -12,6 +12,28 @@ export async function signup(
     const { username, email, password } = signUpSchema.parse(credentials);
     const passwordHash = await hash(password);
 
+    const googleUser = await prisma.user.findFirst({
+      where: {
+        AND: [
+          {
+            email: {
+              equals: email,
+              mode: "insensitive",
+            },
+          },
+          { googleId: { not: null } },
+        ],
+      },
+    });
+
+    if (googleUser) {
+      return {
+        error: true,
+        message:
+          "You already have an account please continue with google to login",
+      };
+    }
+
     const existingusername = await prisma.user.findFirst({
       where: {
         username: {

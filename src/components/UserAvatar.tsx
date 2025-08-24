@@ -27,7 +27,7 @@ export default function UserAvatar({
     />
   ) : (
     <div
-      className="flex items-center justify-center rounded-full bg-primary text-white font-bold"
+      className="flex items-center justify-center rounded-full bg-primary text-white"
       style={{ width: avatarUrl && avatarUrl.length > 1 ? 80 : size, height: avatarUrl && avatarUrl.length > 1 ? 40 : size, fontSize: size / 2.5 }}
     >
       {avatarUrl} {/* this will show initials */}

@@ -162,11 +162,11 @@ function CustomChannelPreviewMessenger({
         onSelect();
       }}
     >
-      <div className="flex max-w-[200px]  items-center gap-2">
+      <div className="flex max-w-[200px] items-center gap-2">
         <UserAvatar
           avatarUrl={
             otherUser?.length === 1
-              ? otherUser[0].user?.image
+              ? otherUser[0].user?.image || otherUser[0].user?.name?.[0]
               : otherUser
                   .map((u) => u.user?.name?.[0] ?? "")
                   .join("")

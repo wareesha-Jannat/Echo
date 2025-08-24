@@ -79,6 +79,7 @@ export async function GET(req: NextRequest) {
         data: {
           username,
           displayName: googleUser.name,
+          email: googleUser.email,
           googleId: googleUser.id,
         },
       });
@@ -105,9 +106,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url));
   } catch (error) {
     console.error("Google Callback Error:", error);
-    // Optional: Clear cookies here as well to avoid stale values
+
+    // Clear cookies here as well to avoid stale values
     cookieStore.set("state", "", { maxAge: 0, path: "/" });
     cookieStore.set("code_verifier", "", { maxAge: 0, path: "/" });
+
     if (error instanceof OAuth2RequestError) {
       return new NextResponse(null, {
         status: 400,
