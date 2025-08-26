@@ -82,6 +82,7 @@ export function useSubmitPostMutation() {
         },
       });
       toast({
+         variant: "success",
         description: "Post created successfully",
       });
     },

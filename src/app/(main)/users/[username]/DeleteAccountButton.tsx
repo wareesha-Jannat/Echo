@@ -25,6 +25,7 @@ const DeleteAccountButton = ({ id }: DeleteAccountProps) => {
     },
     onSuccess: () => {
       toast({
+         variant: "success",
         description: "Account deleted Successfully",
       });
 

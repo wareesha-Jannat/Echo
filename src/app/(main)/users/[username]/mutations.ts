@@ -97,6 +97,7 @@ export function useUpdateProfileMutation() {
       );
       router.refresh();
       toast({
+         variant: "success",
         description: "Profile Updated",
       });
     },

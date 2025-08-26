@@ -1,11 +1,12 @@
 import {
   InfiniteData,
+  QueryClient,
   QueryKey,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
 import { deleteComment, SubmitComment } from "./actions";
-import { CommentPage } from "@/lib/types";
+import { CommentPage, PostsPage, PostsPageWithMoods } from "@/lib/types";
 import { toast } from "../ui/use-toast";
 
 export function useSubmitCommentMutation() {
@@ -17,7 +18,7 @@ export function useSubmitCommentMutation() {
 
       await queryClient.cancelQueries({ queryKey });
 
-      (queryClient.setQueryData<InfiniteData<CommentPage, string | null>>(
+      queryClient.setQueryData<InfiniteData<CommentPage, string | null>>(
         queryKey,
         (oldData) => {
           if (!oldData) return;
@@ -35,10 +36,12 @@ export function useSubmitCommentMutation() {
             };
           }
         },
-      ),
-        toast({
-          description: "Comment added successfully",
-        }));
+      );
+      updateCommentCount(newComment.postId, 1, queryClient);
+      toast({
+        variant: "success",
+        description: "Comment added successfully",
+      });
     },
     onError: () => {
       toast({
@@ -49,6 +52,7 @@ export function useSubmitCommentMutation() {
   });
   return mutation;
 }
+
 export function useDeleteCommentMutation() {
   const queryClient = useQueryClient();
 
@@ -58,7 +62,7 @@ export function useDeleteCommentMutation() {
       const queryKey: QueryKey = ["comments", deletedComment.postId];
       await queryClient.cancelQueries({ queryKey });
 
-      (queryClient.setQueryData<InfiniteData<CommentPage, string | null>>(
+      queryClient.setQueryData<InfiniteData<CommentPage, string | null>>(
         queryKey,
         (oldData) => {
           if (!oldData) return;
@@ -70,12 +74,15 @@ export function useDeleteCommentMutation() {
             })),
           };
         },
-      ),
-        toast({
-          description: "comment deleted successfully",
-        }));
+      );
+
+      updateCommentCount(deletedComment.postId, -1, queryClient);
+      toast({
+        variant: "success",
+        description: "comment deleted successfully",
+      });
     },
-    onError(error) {
+    onError() {
       toast({
         variant: "destructive",
         description: "Failed to delete Comment",
@@ -83,4 +90,64 @@ export function useDeleteCommentMutation() {
     },
   });
   return mutation;
+}
+
+function updateCommentCount(
+  postId: string,
+  delta: number,
+  queryClient: QueryClient,
+) {
+  const queryKey1: QueryKey = ["post-feed", "for-you"];
+  const queryKey2: QueryKey = ["post-feed", "following"];
+
+  queryClient.setQueryData<InfiniteData<PostsPageWithMoods, string | null>>(
+    queryKey1,
+    (oldData) => {
+      if (!oldData) return;
+      return {
+        pageParams: oldData.pageParams,
+        pages: oldData.pages.map((page) => ({
+          nextCursor: page.nextCursor,
+          moods: page.moods,
+          posts: page.posts.map((post) =>
+            post.id === postId
+              ? {
+                  ...post,
+                  _count: {
+                    ...post._count,
+                    commets: post._count.commmets + delta,
+                  },
+                }
+              : post,
+          ),
+        })),
+      };
+    },
+  );
+
+  queryClient.setQueryData<InfiniteData<PostsPage, string | null>>(
+    queryKey2,
+    (oldData) => {
+      if (!oldData) return;
+      return {
+        pageParams: oldData.pageParams,
+        pages: oldData.pages.map((page) => ({
+          nextCursor: page.nextCursor,
+          posts: page.posts.map((post) =>
+            post.id === postId
+              ? {
+                  ...post,
+                  _count: {
+                    ...post._count,
+                    commets: post._count.commmets + delta,
+                  },
+                }
+              : post,
+          ),
+        })),
+      };
+    },
+  );
+
+  console.log("count updated successfully");
 }

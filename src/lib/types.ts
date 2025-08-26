@@ -1,6 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { prisma } from "./prisma";
-import { getDisplayName } from "next/dist/shared/lib/utils";
+
 import { ChannelData } from "stream-chat";
 
 export function getUserDataSelect(loggedInUserId: string) {
