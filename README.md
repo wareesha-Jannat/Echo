@@ -66,10 +66,13 @@ Custom-authenticated social media platform featuring chat, media sharing, mood-b
    ```
 
 ## Test Account
-Use the following credentials to explore the app after running locally:
+Use the following credentials to explore the app :
 
 - **Username:** alice-shane
 - **Password:** hardcant
+
+- **Username:** charlie-pat
+- **Password:** elabglow
 
 ## Live Demo
 [Visit the live site](https://echo-ashy.vercel.app)
