@@ -53,6 +53,23 @@ const ForYouFeed = () => {
     return posts.filter((p) => p.mood && selectedMoods.includes(p.mood));
   }, [posts, selectedMoods, qod, cachedQuestion?.question]);
 
+  const uniqueMoods = useMemo(() => {
+    const seen = new Set<string>();
+    return moods.filter((mood) => {
+      const normalized = mood
+        .replace(
+          /([\u2700-\u27BF]|[\uE000-\uF8FF]|[\uD83C-\uDBFF\uDC00-\uDFFF]|\u24C2|[\u2600-\u26FF])/g,
+          "",
+        )
+        .toLowerCase()
+        .trim();
+
+      if (seen.has(normalized)) return false;
+      seen.add(normalized);
+      return true;
+    });
+  }, [moods]);
+
   if (status === "pending") {
     return (
       <div>
@@ -78,7 +95,7 @@ const ForYouFeed = () => {
   return (
     <>
       <MoodFilters
-        moods={moods}
+        moods={uniqueMoods}
         selectedMoods={selectedMoods}
         setSelectedMoods={setSelectedMoods}
       />
