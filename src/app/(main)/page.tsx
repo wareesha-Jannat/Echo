@@ -1,11 +1,9 @@
 import PostEditor from "@/components/posts/editor/PostEditor";
-
 import TrendsSidebar from "@/components/TrendsSidebar";
 import ForYouFeed from "./ForYouFeed";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FollowingFeed from "./FollowingFeed";
 import QuestionOfDay from "./QuestionOfDay";
-import { useState } from "react";
 import { QodProvider } from "./QodContext";
 
 export default function Home() {

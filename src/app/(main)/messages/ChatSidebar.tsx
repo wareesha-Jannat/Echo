@@ -17,6 +17,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "@/components/ui/use-toast";
+import kyInstance from "@/lib/ky";
 
 interface ChatSidebarProps {
   open: boolean;
@@ -76,7 +78,7 @@ const ChatSidebar = ({ open, onclose }: ChatSidebarProps) => {
           const uniqueChannels: typeof channels = [];
 
           for (const ch of channels) {
-            if (!ch.id) continue; // skip channels without an id move to next iteration
+            if (!ch.id) continue; 
 
             if (!seenChannelIds.has(ch.id)) {
               seenChannelIds.add(ch.id);
@@ -144,16 +146,38 @@ function CustomChannelPreviewMessenger({
   const { channel, setActiveChannel } = props;
   const { client } = useChatContext();
 
-  let isCreator = channel.data?.created_by?.id === client.userID;
+  const isGroupChat = channel?.data?.name?.endsWith("GC") ? true : false;
+  console.log(channel.data?.name, isGroupChat);
 
   const handleDelete = async () => {
     try {
-      await channel.delete();
-    } catch (error) {}
+      if (!client.user?.id) {
+        toast({
+          variant: "destructive",
+          description: "unauthorized",
+        });
+      } else {
+        await kyInstance.post("/api/stream/delete-channel", {
+          json: {
+            channelId: channel.id,
+            userId: client.userID,
+            isGroupChat: isGroupChat,
+          },
+        });
+        setActiveChannel?.(undefined)
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        description: "could not delete chat please try again",
+      });
+    }
   };
 
   const members = Object.values(channel.state.members);
   const otherUser = members.filter((m) => m.user?.id !== client.userID);
+
   return (
     <div
       className="hover:bg-muted flex cursor-pointer items-center justify-between px-3 py-2"
@@ -166,18 +190,18 @@ function CustomChannelPreviewMessenger({
         <UserAvatar
           avatarUrl={
             otherUser?.length === 1
-              ? otherUser[0].user?.image || otherUser[0].user?.name?.[0]
+              ? otherUser[0].user?.image || otherUser[0]?.user?.name?.[0]
               : otherUser
                   .map((u) => u.user?.name?.[0] ?? "")
                   .join("")
                   .slice(0, 2)
-                  .toUpperCase()
+                  .toUpperCase() || "D"
           }
           size={48}
         />
         <div className="flex min-w-0 flex-col">
           <span className="truncate font-medium">
-            {channel.data?.name || otherUser[0].user?.name || "UnnamedChat"}
+            {channel.data?.name || otherUser[0]?.user?.name || "Deleted User"}
           </span>
           <span className="text-muted-foreground truncate text-sm">
             {channel.state.messages[channel.state.messages.length - 1]?.text ||
@@ -185,16 +209,20 @@ function CustomChannelPreviewMessenger({
           </span>
         </div>
       </div>
-      {isCreator && <DeleteChatButton handleDelete={handleDelete} />}
+      <DeleteChatButton handleDelete={handleDelete} isGroupChat={isGroupChat} />
     </div>
   );
 }
 
 interface DeleteChatButtonProps {
   handleDelete: () => void;
+  isGroupChat: boolean;
 }
 
-function DeleteChatButton({ handleDelete }: DeleteChatButtonProps) {
+function DeleteChatButton({
+  handleDelete,
+  isGroupChat,
+}: DeleteChatButtonProps) {
   return (
     <>
       <DropdownMenu>
@@ -213,7 +241,7 @@ function DeleteChatButton({ handleDelete }: DeleteChatButtonProps) {
             }}
           >
             <Trash2 className="size-4 text-red-500" />
-            <span>Delete Chat</span>
+            <span>{isGroupChat ? "Leave Group" : "Delete Chat"}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

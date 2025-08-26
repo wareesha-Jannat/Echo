@@ -36,7 +36,7 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
     queryFn: async () => {
       const q = searchInputDebounced.toLowerCase();
       return client.queryUsers(
-        {
+        {  
           ...(q
             ? {
                 $or: [
@@ -45,9 +45,10 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
                 ],
               }
             : {}),
+            
         },
         { name: 1, username: 1 },
-        { limit: 15 },
+        { limit: 15, include_deactivated_users : false }
       );
     },
   });
@@ -60,15 +61,17 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
     mutationFn: async () => {
       const members = [loggedInUser.id, ...selectedUsers.map((u) => u.id)];
 
-      const channel = client.channel("messaging", null, {
+      const channel = client.channel("messaging", {
         members,
         name:
           members.length > 2
-            ? `${loggedInUser.displayName}, ${selectedUsers.map((u) => u.name).join(", ")}`
+            ? `${loggedInUser.displayName}, ${selectedUsers.map((u) => u.name).join(", ")} GC`
             : "",
       });
+      await channel.create();
+   
+      console.log(channel.data?.name);
       await channel.watch();
-
       return channel;
     },
     onSuccess: (channel) => {
@@ -76,6 +79,7 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
       onChatCreated();
     },
     onError(error) {
+      console.error(error)
       toast({
         variant: "destructive",
         description: "Error starting chat. Please try again,",
@@ -85,8 +89,8 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
 
   return (
     <Dialog open onOpenChange={onOpenChange}>
-      <DialogContent className="bg-card p-0">
-        <DialogHeader className="px-6 pt-6">
+      <DialogContent className="bg-card rounded-2xl p-0">
+        <DialogHeader className="px-4 pt-6">
           <DialogTitle> New Chat </DialogTitle>
         </DialogHeader>
         <div className="group relative">
@@ -99,7 +103,7 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
           />
         </div>
         {!!selectedUsers.length && (
-          <div className="mt-4 flex flex-wrap gap-2 p-2">
+          <div className="mt-2 flex flex-wrap gap-2 p-2">
             {selectedUsers.map((user) => (
               <SelectedUserTag
                 key={user.id}
@@ -114,7 +118,7 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
           </div>
         )}
         <hr />
-        <div className="h-96 overflow-y-auto">
+        <div className="max-h-[70dvh] overflow-y-auto">
           {isSuccess &&
             filteredUsers?.map((user) => (
               <UserResult
@@ -172,7 +176,7 @@ function UserResult({ user, selected, onClick }: UserResultProps) {
       onClick={onClick}
     >
       <div className="flex items-center gap-2">
-        <UserAvatar avatarUrl={user.image || user.name?.[0]}  />
+        <UserAvatar avatarUrl={user.image || user.name?.[0]} />
         <div className="flex flex-col text-start">
           <p className="font-bold">{user.name}</p>
           <p className="text-muted-foreground">@{user.username}</p>
@@ -194,7 +198,7 @@ function SelectedUserTag({ user, onRemove }: SelectedUserTagProps) {
       onClick={onRemove}
       className="hover:bg-muted/50 flex items-center gap-2 rounded-full border p-1"
     >
-      <UserAvatar avatarUrl={user.image  || user.name?.[0]} size={24} />
+      <UserAvatar avatarUrl={user.image || user.name?.[0]} size={24} />
       <p className="font-bold">{user.name}</p>
       <X className="text-muted-foreground mx-2 size-5" />
     </button>

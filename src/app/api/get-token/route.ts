@@ -11,6 +11,7 @@ export async function GET() {
     const expirationTime = Math.floor(Date.now() / 1000) + 60 * 60;
 
     const issuedAt = Math.floor(Date.now() / 1000) - 60;
+
     const token = streamServerClient.createToken(
       user.id,
       expirationTime,
@@ -19,6 +20,7 @@ export async function GET() {
 
     return Response.json({ token });
   } catch (error) {
+    console.log(error);
     return Response.json(
       {
         error: "Internal server error",

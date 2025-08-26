@@ -37,6 +37,36 @@ export async function DeleteAccount(id: string) {
   if (!loggedInUser) throw new Error("Unauthorized");
 
   const userId = loggedInUser.id;
+  const channels = await streamServerClient.queryChannels(
+    { members: { $in: [userId] } },
+    { last_message_at: -1 },
+  );
+
+  for (const channel of channels) {
+    const membersCount = Object.keys(channel.state.members || {}).length;
+
+    if (membersCount > 2) {
+      await channel.removeMembers([userId]);
+
+      const updatedChannel = await streamServerClient.channel(
+        channel.type,
+        channel.id,
+      );
+      await updatedChannel.watch();
+      const remainingMembers = Object.keys(
+        updatedChannel.state.members || {},
+      ).length;
+
+      if (remainingMembers === 0) {
+        await streamServerClient.deleteChannels([updatedChannel.cid], {
+          hard_delete: true,
+        });
+        console.log("channel deleted");
+      }
+    } else {
+      await channel.hide(userId, true);
+    }
+  }
 
   await deleteSession(session.id);
   await deleteSessionCookie();
@@ -45,15 +75,7 @@ export async function DeleteAccount(id: string) {
     (await tx.user.delete({
       where: { id },
     }),
-      // 1. Anonymize user in Stream
-      await streamServerClient.upsertUser({
-        id: userId,
-        name: "Deleted User",
-        image: undefined,
-      }),
-      // 2. Soft delete in Stream (keeps messages)
       await streamServerClient.deleteUser(userId, {
-        hard_delete: false,
         mark_messages_deleted: false,
       }));
   });

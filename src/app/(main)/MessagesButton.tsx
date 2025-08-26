@@ -9,9 +9,10 @@ import Link from "next/link";
 
 interface MessagesButtonProps {
   initialState: MessageCountInfo;
+  isActive : (path: string) => boolean
 }
 
-export default function MessagesButton({ initialState }: MessagesButtonProps) {
+export default function MessagesButton({ initialState, isActive }: MessagesButtonProps) {
   const { data } = useQuery({
     queryKey: ["unread-messages-count"],
     queryFn: () =>
@@ -23,7 +24,7 @@ export default function MessagesButton({ initialState }: MessagesButtonProps) {
   return (
     <Button
       variant="ghost"
-      className="flex items-center justify-start sm:gap-3"
+      className={`flex items-center justify-start sm:gap-3 ${isActive("/messages") ? "bg-accent text-accent-foreground" : ""}`}
       title="Messages"
       asChild
     >

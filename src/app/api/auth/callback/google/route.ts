@@ -2,7 +2,7 @@ import { CreateSessionAndSetCookies, google } from "@/auth";
 import kyInstance from "@/lib/ky";
 import { prisma } from "@/lib/prisma";
 import streamServerClient from "@/lib/stream";
-import { slugify } from "@/lib/utils";
+import { generateRandomCode } from "@/lib/utils";
 import { OAuth2RequestError } from "arctic";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -60,7 +60,6 @@ export async function GET(req: NextRequest) {
       });
 
       if (oldUser) {
-        // Update the user to link their Google account
         await prisma.user.update({
           where: { id: oldUser.id },
           data: {
@@ -72,7 +71,7 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    const username = slugify(googleUser.name);
+    const username = googleUser.name.split(" ")[0] + generateRandomCode();
 
     const newUser = await prisma.$transaction(async (tx) => {
       const createdUser = await tx.user.create({
@@ -83,19 +82,10 @@ export async function GET(req: NextRequest) {
           googleId: googleUser.id,
         },
       });
-      const newUsername = username + "-" + createdUser.id.slice(0, 4);
-      await tx.user.update({
-        where: {
-          id: createdUser.id,
-        },
-        data: {
-          username: newUsername,
-        },
-      });
 
       await streamServerClient.upsertUser({
         id: createdUser.id,
-        username: newUsername,
+        username: createdUser.username,
         name: googleUser.name,
       });
       return createdUser;
@@ -105,8 +95,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.redirect(new URL("/", req.url));
   } catch (error) {
-    console.error("Google Callback Error:", error);
-
     // Clear cookies here as well to avoid stale values
     cookieStore.set("state", "", { maxAge: 0, path: "/" });
     cookieStore.set("code_verifier", "", { maxAge: 0, path: "/" });
