@@ -44,25 +44,35 @@ const ForYouFeed = () => {
 
   const moods = data?.pages[0].moods || [];
 
+  function normalizedMood(mood: string) {
+    return mood
+      ?.replace(
+        /([\u2700-\u27BF]|[\uE000-\uF8FF]|[\uD83C-\uDBFF\uDC00-\uDFFF]|\u24C2|[\u2600-\u26FF])/g,
+        "",
+      )
+      .toLowerCase()
+      .trim();
+  }
+
   let filteredPosts = useMemo(() => {
     if (qod) return posts.filter((p) => p.qod === cachedQuestion?.question);
 
     if (!selectedMoods.length) {
       return posts;
     }
-    return posts.filter((p) => p.mood && selectedMoods.includes(p.mood));
+    return posts.filter(
+      (p) =>
+        p.mood &&
+        selectedMoods.some(
+          (m) => normalizedMood(m) === normalizedMood(p.mood!),
+        ),
+    );
   }, [posts, selectedMoods, qod, cachedQuestion?.question]);
 
   const uniqueMoods = useMemo(() => {
     const seen = new Set<string>();
     return moods.filter((mood) => {
-      const normalized = mood
-        .replace(
-          /([\u2700-\u27BF]|[\uE000-\uF8FF]|[\uD83C-\uDBFF\uDC00-\uDFFF]|\u24C2|[\u2600-\u26FF])/g,
-          "",
-        )
-        .toLowerCase()
-        .trim();
+      const normalized = normalizedMood(mood);
 
       if (seen.has(normalized)) return false;
       seen.add(normalized);
