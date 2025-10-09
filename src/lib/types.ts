@@ -71,7 +71,7 @@ export interface PostsPageWithMoods extends PostsPage {
  moods : string[];
 }
 
-export const notificationInclude ={
+export const notificationInclude = {
   issuer : {
     select : {
       username : true,

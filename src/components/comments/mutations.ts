@@ -115,7 +115,7 @@ function updateCommentCount(
                   ...post,
                   _count: {
                     ...post._count,
-                    commets: post._count.commmets + delta,
+                    commmets: post._count.commmets + delta,
                   },
                 }
               : post,
@@ -139,7 +139,7 @@ function updateCommentCount(
                   ...post,
                   _count: {
                     ...post._count,
-                    commets: post._count.commmets + delta,
+                    commmets: post._count.commmets + delta,
                   },
                 }
               : post,

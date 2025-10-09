@@ -24,9 +24,9 @@ export async function GET(req: Request) {
         publicId: true,
       },
     });
-    for (const media of unusedMedia) {
-      await cloudinary.uploader.destroy(media.publicId);
-    }
+
+    await cloudinary.api.delete_resources(unusedMedia.map((m) => m.publicId));
+    console.log("unused media clenup successfull", unusedMedia.length);
 
     await prisma.media.deleteMany({
       where: {
@@ -37,6 +37,7 @@ export async function GET(req: Request) {
     });
     return new Response();
   } catch (error) {
+    console.log("error", error);
     return Response.json(
       { error: "Internal Server Error", message: (error as Error).message },
       { status: 500 },

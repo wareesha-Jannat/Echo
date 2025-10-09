@@ -36,7 +36,7 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
     queryFn: async () => {
       const q = searchInputDebounced.toLowerCase();
       return client.queryUsers(
-        {  
+        {
           ...(q
             ? {
                 $or: [
@@ -45,10 +45,9 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
                 ],
               }
             : {}),
-            
         },
         { name: 1, username: 1 },
-        { limit: 15, include_deactivated_users : false }
+        { limit: 15, include_deactivated_users: false },
       );
     },
   });
@@ -69,8 +68,7 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
             : "",
       });
       await channel.create();
-   
-      console.log(channel.data?.name);
+
       await channel.watch();
       return channel;
     },
@@ -79,7 +77,6 @@ const NewChatDialog = ({ onOpenChange, onChatCreated }: NewChatDialogProps) => {
       onChatCreated();
     },
     onError(error) {
-      console.error(error)
       toast({
         variant: "destructive",
         description: "Error starting chat. Please try again,",

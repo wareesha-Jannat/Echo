@@ -11,8 +11,6 @@ export async function POST(req: NextRequest) {
 
     const name = channel.data?.name;
 
-    console.log(name);
-
     if (isGroupChat) {
       await channel.removeMembers([userId]);
 

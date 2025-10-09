@@ -61,7 +61,7 @@ export function useDeletePostMutation() {
         },
       );
       toast({
-         variant: "success",
+        variant: "success",
         description: "Post deleted successfully",
       });
       if (pathname === `/post/${deletedPost.id}`) {

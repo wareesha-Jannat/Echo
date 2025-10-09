@@ -20,7 +20,7 @@ export async function GET() {
 
     return Response.json({ token });
   } catch (error) {
-    console.log(error);
+  
     return Response.json(
       {
         error: "Internal server error",

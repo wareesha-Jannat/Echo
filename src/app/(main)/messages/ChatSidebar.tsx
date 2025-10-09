@@ -78,7 +78,7 @@ const ChatSidebar = ({ open, onclose }: ChatSidebarProps) => {
           const uniqueChannels: typeof channels = [];
 
           for (const ch of channels) {
-            if (!ch.id) continue; 
+            if (!ch.id) continue;
 
             if (!seenChannelIds.has(ch.id)) {
               seenChannelIds.add(ch.id);
@@ -147,7 +147,6 @@ function CustomChannelPreviewMessenger({
   const { client } = useChatContext();
 
   const isGroupChat = channel?.data?.name?.endsWith("GC") ? true : false;
-  console.log(channel.data?.name, isGroupChat);
 
   const handleDelete = async () => {
     try {
@@ -164,10 +163,9 @@ function CustomChannelPreviewMessenger({
             isGroupChat: isGroupChat,
           },
         });
-        setActiveChannel?.(undefined)
+        setActiveChannel?.(undefined);
       }
     } catch (error) {
-      console.error(error);
       toast({
         variant: "destructive",
         description: "could not delete chat please try again",

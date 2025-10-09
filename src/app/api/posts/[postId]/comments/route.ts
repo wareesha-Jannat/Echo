@@ -25,8 +25,7 @@ export async function GET(
       cursor: cursor ? { id: cursor } : undefined,
     });
 
-    const nextCursor =
-      comments.length > pageSize ? comments[pageSize].id : null;
+    const nextCursor = comments.length > pageSize ? comments[pageSize].id : null;
 
     const finalComments = comments.slice(0, pageSize);
     const data: CommentPage = {

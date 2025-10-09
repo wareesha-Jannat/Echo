@@ -34,3 +34,16 @@ export function formatNumber(n: number): string {
     maximumFractionDigits: 1,
   }).format(n);
 }
+
+export function getPublicIdFromUrl(url: string): string | null {
+  const cleanUrl = url.split("?")[0];
+  const parts = cleanUrl.split("/upload/");
+  if (parts.length < 2) return null;
+  const segments = parts[1].split("/");
+  // Remove version segment if present (like "v1759331497")
+  if (/^v[0-9]+$/.test(segments[0])) {
+    segments.shift();
+  }
+    // Join all remaining parts, then strip extension
+  return segments.join("/").replace(/\.[^/.]+$/, "");
+}

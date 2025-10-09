@@ -1,9 +1,11 @@
 "use server";
 
 import { deleteSession, deleteSessionCookie, validateRequest } from "@/auth";
+import cloudinary from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
 import streamServerClient from "@/lib/stream";
 import { getUserDataSelect } from "@/lib/types";
+import { getPublicIdFromUrl } from "@/lib/utils";
 import { editProfileSchema, UpdateProfileValues } from "@/lib/validation";
 
 export async function EditProfile(values: UpdateProfileValues) {
@@ -61,13 +63,38 @@ export async function DeleteAccount(id: string) {
         await streamServerClient.deleteChannels([updatedChannel.cid], {
           hard_delete: true,
         });
-        console.log("channel deleted");
       }
     } else {
       await channel.hide(userId, true);
     }
   }
+  //Delete user's cloudinary assets
+  const mediaIds = await prisma.media.findMany({
+    where: {
+      post: {
+        userId: id,
+      },
+    },
+    select: {
+      publicId: true,
+    },
+  });
 
+  let AllPublicIds: string[] = [...mediaIds.map((m) => m.publicId)];
+  if (loggedInUser.avatarUrl) {
+    const id = getPublicIdFromUrl(loggedInUser.avatarUrl);
+    if (id) {
+      AllPublicIds.push(id);
+    }
+  }
+  if (AllPublicIds.length > 0) {
+    try {
+      await cloudinary.api.delete_resources(AllPublicIds);
+      console.log("cloudinary cleanup successfull", AllPublicIds.length);
+    } catch (error) {
+      console.log("cloudinary cleanup failed", error);
+    }
+  }
   await deleteSession(session.id);
   await deleteSessionCookie();
 
