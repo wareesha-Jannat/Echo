@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import Image from "next/image";
-import loginImage from "@/assets/login-image.jpg";
+
 import LoginForm from "./LoginForm";
 import Link from "next/link";
 import GoogleSignInButton from "./google/GoogleSignInButton";
@@ -45,6 +44,7 @@ export default function Page() {
           loop
           muted
           playsInline
+          preload="metadata"
           className="hidden object-cover md:block md:w-1/2"
         >
           {" "}

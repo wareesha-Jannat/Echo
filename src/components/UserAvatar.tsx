@@ -12,14 +12,15 @@ export default function UserAvatar({
   size = 42,
   className,
 }: UserAvatarProps) {
-  const isUrl = avatarUrl?.startsWith("http") || avatarUrl?.startsWith("/")
-  return isUrl ?  (
+  const isUrl = avatarUrl?.startsWith("http") || avatarUrl?.startsWith("/");
+  return isUrl ? (
     <Image
       src={avatarUrl!}
-      alt=""
+      alt="User Avatar"
       height={size}
       width={size}
-      quality={100}
+      sizes={`${size}px`}
+      quality={85}
       className={cn(
         "bg-secondary aspect-square h-fit flex-none rounded-full object-cover",
         className,
@@ -27,11 +28,14 @@ export default function UserAvatar({
     />
   ) : (
     <div
-      className="flex items-center justify-center rounded-full bg-primary text-white"
-      style={{ width: avatarUrl && avatarUrl.length > 1 ? 80 : size, height: avatarUrl && avatarUrl.length > 1 ? 40 : size, fontSize: size / 2.5 }}
+      className="bg-primary flex items-center justify-center rounded-full text-white"
+      style={{
+        width: avatarUrl && avatarUrl.length > 1 ? 80 : size,
+        height: avatarUrl && avatarUrl.length > 1 ? 40 : size,
+        fontSize: size / 2.5,
+      }}
     >
       {avatarUrl} {/* this will show initials */}
     </div>
   );
-  
 }

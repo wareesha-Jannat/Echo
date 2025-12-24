@@ -10,7 +10,7 @@
   }
 
   .bg-page-gradient {
-    @apply bg-gradient-to-br from-sky-100 via-cyan-50 to-emerald-200 dark:from-sky-900 dark:via-cyan-900 dark:to-emerald-900;
+    @apply bg-gradient-to-br from-sky-100 via-cyan-50 to-emerald-100 dark:from-sky-900 dark:via-cyan-900 dark:to-emerald-900;
   }
 
   /* Hide scrollbar for IE, Edge and Firefox */
