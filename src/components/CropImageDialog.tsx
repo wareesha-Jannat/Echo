@@ -43,7 +43,7 @@ export default function CropImageDialog({
           guides={false}
           zoomable={false}
           ref={cropperRef}
-          className="mx-auto size-fit"
+          className="mx-auto max-h-[60vh]"
         />
         <DialogFooter>
           <Button variant="secondary" onClick={onclose}>

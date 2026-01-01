@@ -32,8 +32,8 @@ Custom-authenticated social media platform featuring chat, media sharing, mood-b
 - **Frontend:** Next.js 15, React 19, Tailwind CSS
 - **Backend:** Next.js API Routes, Prisma ORM
 - **Database:** PostgreSQL
-- **Authentication:** Custom Auth with Argon2 and arctic 
-- **Chat:** Stream Chat 
+- **Authentication:** Custom Auth with Argon2 and arctic
+- **Chat:** Stream Chat
 - **Media Handling:** Cloudinary
 
 ## Installation
@@ -46,26 +46,28 @@ Custom-authenticated social media platform featuring chat, media sharing, mood-b
    ```
 
 2. Navigate to project directory:
- ```bash
-   cd echo-social-media 
 
-   ```
-   
+```bash
+  cd echo-social-media
+
+```
 
 3. Install dependencies:
- ```bash
-   npm install --legacy-peer-deps
-   
-   ```
-   
-    
+
+```bash
+  npm install --legacy-peer-deps
+
+```
+
 4. Start the development server:
-    ```bash
+
+   ```bash
    npm run dev
-   
+
    ```
 
 ## Test Account
+
 Use the following credentials to explore the app :
 
 - **Username:** alice-shane
@@ -75,23 +77,22 @@ Use the following credentials to explore the app :
 - **Password:** elabglow
 
 ## Live Demo
-[Visit the live site](https://echo-ashy.vercel.app)
 
+[Visit the live site](https://echo-ashy.vercel.app)
 
 ## Screenshots
 
 ### Login Page
+
 ![Login Page](./public/screenshots/login.png)
 
 ### Home Page
+
 ![Home Page](./public/screenshots/home.png)
 
 ### Dashboard
+
 ![Chat page](./public/screenshots/messaging.png)
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ## Credits
 
