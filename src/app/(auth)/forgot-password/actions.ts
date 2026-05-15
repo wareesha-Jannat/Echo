@@ -2,9 +2,11 @@
 
 import { prisma } from "@/lib/prisma";
 import { forgotPasswordSchema, ForgotPasswordValues } from "@/lib/validation";
-import { randomBytes } from "crypto";
+import crypto from "crypto";
 import { addMinutes } from "date-fns";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function HandleForgotPassword(
   values: ForgotPasswordValues,
@@ -22,7 +24,7 @@ export async function HandleForgotPassword(
       };
     }
 
-    const token = randomBytes(32).toString("hex");
+    const token = crypto.randomBytes(32).toString("hex");
     const expiresAt = addMinutes(new Date(), 15);
 
     await prisma.passwordResetToken.create({
@@ -35,22 +37,18 @@ export async function HandleForgotPassword(
 
     const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${token}`;
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
+    const { error } = await resend.emails.send({
+      from: "onboarding@resend.dev",
+      to: "wjannat309@gmail.com",
       subject: "Reset your Password",
       html: `<p>Click the link below to reset your password:</p>
            <a href="${resetLink}">${resetLink}</a>
            <p>This link is valid for 15 minutes.</p>`,
     });
+
+    if (error) {
+      return { error: "Failed to send email. Try again later." };
+    }
 
     return {
       success: true,

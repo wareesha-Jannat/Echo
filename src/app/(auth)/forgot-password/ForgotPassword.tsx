@@ -38,9 +38,8 @@ const ForgotPassword = () => {
         return;
       }
       toast({
-         variant: "success",
-        description:
-          "Password reset link sent successfully, please check your email",
+        variant: "success",
+        description: "Password reset link sent successfully",
       });
     },
     onError: () => {
